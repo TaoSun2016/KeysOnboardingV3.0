@@ -1,0 +1,78 @@
+﻿@model IEnumerable<KeysOnboarding.Models.ProductSold>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Product Sold List</h2>
+
+<p>
+    <a id="btnCreate" href="#myModal" data-toggle="modal" class="btn btn-success">Create New</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Store.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateSold)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Store.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateSold)
+            </td>
+            <td>
+                <a id="btnEdit" class="btn btn-info" data-toggle="modal" data-id="@item.Id" href="#myModal">Edit</a>
+                <a id="btnDelete" class="btn btn-danger" data-toggle="modal" data-id="@item.Id" href="#myModal">Delete</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="modal-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $("#btnCreate").click(function (event) {
+            $("#modal-content").load("/ProductSolds/Create");
+        })
+
+        $("#btnEdit").click(function (event) {
+            $("#modal-content").load("/ProductSolds/Edit/" + $(this).data("id"));
+        });
+
+        $("#btnDelete").click(function (event) {
+            $("#modal-content").load("/ProductSolds/Delete/" + $(this).data("id"));
+        });
+    </script>
+}
