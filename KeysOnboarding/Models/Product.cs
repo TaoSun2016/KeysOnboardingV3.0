@@ -19,6 +19,6 @@ namespace KeysOnboarding.Models
         [Required(ErrorMessage = "Please intput the Price")]
         //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString ="{0:C}")]
         public virtual decimal Price { get; set; }
-        public virtual List<ProductSold> ProductSolds { get; set; }
+        //public virtual List<ProductSold> ProductSolds { get; set; }
     }
 }

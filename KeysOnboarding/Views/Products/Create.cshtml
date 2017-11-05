@@ -1,15 +1,15 @@
-﻿@model KeysOnboarding.Models.Product
+﻿@*@model KeysOnboarding.Models.Product
 
 @{
     ViewBag.Title = "Create";
     Layout = null;
-}
+}*@
 
-<button type="button" class="close" data-dismiss="modal">&times;</button>
+@*<button type="button" class="close" data-dismiss="modal">&times;</button>
 <h4 class="text-primary">Create New Product</h4>
+<hr />*@
 
-
-@using (Html.BeginForm())
+@*@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
@@ -39,6 +39,23 @@
             </div>
         </div>
     </div>
-}
+}*@
 
-@Scripts.Render("~/bundles/jqueryval")
+@*<div>
+    <label for="name">Name</label>
+    <input data-bind="value: $root.Name" type="text" title="Name" />
+</div>
+
+<div>
+    <label for="price">Price</label>
+    <input data-bind="value: $root.Price" type="text" title="Price" />
+</div>
+<br />
+<div>
+    <button class="btn btn-success" data-bind="click: $root.create">Save</button> 
+    <button class="btn btn-info" data-bind="click: $root.reset">Reset</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+</div>*@
+
+

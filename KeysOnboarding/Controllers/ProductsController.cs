@@ -17,46 +17,28 @@ namespace KeysOnboarding.Controllers
         // GET: Products
         public ActionResult Index()
         {
-            return View(db.Products.ToList());
-        }
-
-        // GET: Products/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Product product = db.Products.Find(id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            return View(product);
-        }
-
-        // GET: Products/Create
-        public ActionResult Create()
-        {
             return View();
         }
-
-        // POST: Products/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Price")] Product product)
+        public JsonResult GetAllProducts()
         {
-            if (ModelState.IsValid)
+            return Json(db.Products, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult AddProduct(Product item)
+        {
+            if (item == null)
             {
-                db.Products.Add(product);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                throw new ArgumentNullException("item");
             }
 
-            return View(product);
+            // TO DO : Code to save record into database
+            db.Products.Add(item);
+            db.SaveChanges();
+            return Json(item, JsonRequestBehavior.AllowGet);
         }
+
+
 
         // GET: Products/Edit/5
         public ActionResult Edit(int? id)
@@ -89,30 +71,24 @@ namespace KeysOnboarding.Controllers
             return View(product);
         }
 
-        // GET: Products/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Product product = db.Products.Find(id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            return View(product);
-        }
 
         // POST: Products/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public JsonResult DeleteProduct(int id)
         {
-            Product product = db.Products.Find(id);
-            db.Products.Remove(product);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                Product product = db.Products.Find(id);
+                db.Products.Remove(product);
+                db.SaveChanges();
+            }
+            catch
+            {
+                return Json(new { Status = false }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { Status = true }, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)
