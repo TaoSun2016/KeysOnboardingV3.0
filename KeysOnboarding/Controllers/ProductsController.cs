@@ -40,41 +40,35 @@ namespace KeysOnboarding.Controllers
 
 
 
-        // GET: Products/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Product product = db.Products.Find(id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            return View(product);
-        }
-
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Price")] Product product)
+        public JsonResult EditProduct(int id, Product item)
         {
-            if (ModelState.IsValid)
+            item.Id = id;
+            try
             {
-                db.Entry(product).State = EntityState.Modified;
+                if (item == null)
+                {
+                    throw new ArgumentNullException("item");
+                }
+
+                // TO DO : Code to update record into database
+
+                var product = db.Products.Single(a => a.Id == item.Id);
+                product.Name = item.Name;
+                product.Price = item.Price;
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
-            return View(product);
+            catch
+            {
+                return Json(null);
+            }
+            return Json(db.Products, JsonRequestBehavior.AllowGet);
+
         }
 
 
         // POST: Products/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public JsonResult DeleteProduct(int id)
         {
             try

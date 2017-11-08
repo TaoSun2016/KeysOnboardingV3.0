@@ -1,4 +1,6 @@
-﻿function ProductViewModel() {
+﻿
+
+function ProductViewModel() {
 
     //Make the self as 'this' reference
     var self = this;
@@ -31,26 +33,23 @@
     });
 
     $("#btnCreate").click(function (event) {
-        self.OperationTitle("Create New Prodcut");
-        $("#modal-content").empty();
-        $("#modal-content").append($(".createUI").show());
+        //self.OperationTitle("Create New Prodcut");
+        //$("#modal-content").empty();
+        //$("#modal-content").append($(".createUI").show());
     });
 
     self.edit = function (Product) {
 
         self.Product(Product);
-        alert(self.Product().Id);
-        alert(self.Product().Name);
-        alert(self.Product().Price);
-        self.OperationTitle("Edit Prodcut");
-        $("#modal-content").empty();
-        $("#modal-content").append($(".editUI").show());
+        //self.OperationTitle("Edit Product");
+        //$("#modal-content").empty();
+        //$("#modal-content").append($(".editUI").show());
     };
 
     self.delete = function (Product) {
-        self.OperationTitle("Delete Prodcut");
-        $("#modal-content").empty();
-        $("#modal-content").append($(".deleteUI").show());
+        //self.OperationTitle("Delete Prodcut");
+        //$("#modal-content").empty();
+        //$("#modal-content").append($(".deleteUI").show());
         self.Product(Product);
         alert(self.Product().Id);
         alert(self.Product().Name);
@@ -105,11 +104,11 @@
     // Update product details
     self.update = function () {
         var Product = self.Product();
-
+        console.log("[" + ko.toJSON(Product)+"]");
         $.ajax({
-            url: 'Product/EditProduct',
+            url: 'Products/EditProduct',
             cache: false,
-            type: 'PUT',
+            type: 'POST',
             contentType: 'application/json; charset=utf-8',
             data: ko.toJSON(Product),
             success: function (data) {
@@ -133,7 +132,19 @@
 
     // Cancel product details
     self.cancel = function () {
-        self.Product(null);
+        //self.Product(new ProductViewModel());
     }
+
+    $("#myCreateModal").on("hide", function () {
+        self.Product(new ProductViewModel());
+    });
+
+    $("#myEditModal").on("hide", function () {
+        self.Product(new ProductViewModel());
+    });
+
+    $("#myDeleteModal").on("hide", function () {
+        self.Product(new ProductViewModel());
+    });
 }
 ko.applyBindings(new ProductViewModel());
