@@ -1,63 +1,55 @@
-﻿function ProductViewModel() {
+﻿function CustomerViewModel() {
 
     //Make the self as 'this' reference
     var self = this;
     //Declare observable which will be bind with UI
     self.Id = ko.observable("");
     self.Name = ko.observable("");
-    self.Price = ko.observable("");
+    self.Address = ko.observable("");
 
-    self.OperationTitle = ko.observable("");
-
-    var Product = {
+    var Customer = {
         Id: self.Id,
         Name: self.Name,
-        Price: self.Price
+        Address: self.Address
     };
 
-    self.Product = ko.observable();
-    self.Products = ko.observableArray(); // Contains the list of products
+    self.Customer = ko.observable();
+    self.Customers = ko.observableArray(); // Contains the list of customers
 
     // Initialize the view-model
     $.ajax({
-        url: 'Products/GetAllProducts',
+        url: 'Customers/GetAllCustomers',
         cache: false,
         type: 'GET',
         contentType: 'application/json; charset=utf-8',
         data: {},
         success: function (data) {
-            self.Products(data); //Put the response in ObservableArray
+            self.Customers(data); //Put the response in ObservableArray
         }
     });
 
-    //$("#btnCreate").click(function (event) {
-    //    //self.OperationTitle("Create New Prodcut");
-    //    //$("#modal-content").empty();
-    //    //$("#modal-content").append($(".createUI").show());
-    //});
-
-    self.edit = function (Product) {
-        self.Product(Product);
+    self.edit = function (Customer) {
+        self.Customer(Customer);
     };
 
-    self.delete = function (Product) {
-        self.Product(Product);
+    self.delete = function (Customer) {
+        self.Customer(Customer);
     };
 
     //Add New Item
     self.create = function () {
-        if (Product.Name() != "" &&
-            Product.Price() != "") {
+        if (Customer.Name() != "" &&
+            Customer.Address() != "") {
             $.ajax({
-                url: 'Products/AddProduct',
+                url: 'Customers/AddCustomer',
                 cache: false,
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
-                data: ko.toJSON(Product),
+                data: ko.toJSON(Customer),
                 success: function (data) {
-                    self.Products.push(data);
+                    self.Customers.push(data);
                     self.Name("");
-                    self.Price("");
+                    self.Address("");
                 }
             }).fail(
                 function (xhr, textStatus, err) {
@@ -69,19 +61,19 @@
         }
     }
 
-    // Delete product details
-    self.deleteConfirm = function (Product) {
+    // Delete Customer details
+    self.deleteConfirm = function (Customer) {
 
-        var id = Product.Id;
+        var id = Customer.Id;
 
         $.ajax({
-            url: 'Products/DeleteProduct/' + id,
+            url: 'Customers/DeleteCustomer/' + id,
             cache: false,
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             data: id,
             success: function (data) {
-                self.Products.remove(Product);
+                self.Customers.remove(Customer);
             }
         }).fail(
             function (xhr, textStatus, err) {
@@ -91,18 +83,17 @@
 
     // Update product details
     self.update = function () {
-        var Product = self.Product();
-        console.log("[" + ko.toJSON(Product)+"]");
+        var Customer = self.Customer();
         $.ajax({
-            url: 'Products/EditProduct',
+            url: 'Customers/EditCustomer',
             cache: false,
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
-            data: ko.toJSON(Product),
+            data: ko.toJSON(Customer),
             success: function (data) {
-                self.Products.removeAll();
-                self.Products(data); //Put the response in ObservableArray
-                self.Product(null);
+                self.Customers.removeAll();
+                self.Customers(data); //Put the response in ObservableArray
+                self.Customer(null);
                 alert("Record Updated Successfully");
             }
         })
@@ -115,12 +106,7 @@
     // Reset product details
     self.reset = function () {
         self.Name("");
-        self.Price("");
-    }
-
-    // Cancel product details
-    self.cancel = function () {
-        //self.Product(new ProductViewModel());
+        self.Address("");
     }
 
     $("#myCreateModal").on("hide", function () {
