@@ -14,105 +14,76 @@ namespace KeysOnboarding.Controllers
     {
         private KeysOnboardingContext db = new KeysOnboardingContext();
 
-        // GET: Stores
+        //Render view of stores
+        [HttpGet]
         public ActionResult Index()
-        {
-            return View(db.Stores.ToList());
-        }
-
-        // GET: Stores/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Store store = db.Stores.Find(id);
-            if (store == null)
-            {
-                return HttpNotFound();
-            }
-            return View(store);
-        }
-
-        // GET: Stores/Create
-        public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Stores/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        //Get Json data of all stores
+        [HttpGet]
+        public JsonResult GetAllStores()
+        {
+            return Json(db.Stores, JsonRequestBehavior.AllowGet);
+        }
+
+        //Add new store
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Address")] Store store)
+        public JsonResult AddStore(Store item)
         {
-            if (ModelState.IsValid)
+            if (item == null)
             {
-                db.Stores.Add(store);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                throw new ArgumentNullException("item");
             }
 
-            return View(store);
-        }
-
-        // GET: Stores/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Store store = db.Stores.Find(id);
-            if (store == null)
-            {
-                return HttpNotFound();
-            }
-            return View(store);
-        }
-
-        // POST: Stores/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Address")] Store store)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(store).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(store);
-        }
-
-        // GET: Stores/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Store store = db.Stores.Find(id);
-            if (store == null)
-            {
-                return HttpNotFound();
-            }
-            return View(store);
-        }
-
-        // POST: Stores/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Store store = db.Stores.Find(id);
-            db.Stores.Remove(store);
+            db.Stores.Add(item);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Json(item, JsonRequestBehavior.AllowGet);
+        }
+
+
+        //Edit store info
+        [HttpPost]
+        public JsonResult EditStore(Store item)
+        {
+            try
+            {
+                if (item == null)
+                {
+                    throw new ArgumentNullException("item");
+                }
+
+                var product = db.Stores.Single(a => a.Id == item.Id);
+                product.Name = item.Name;
+                product.Address = item.Address;
+                db.SaveChanges();
+            }
+            catch
+            {
+                return Json(null);
+            }
+            return Json(db.Stores, JsonRequestBehavior.AllowGet);
+
+        }
+
+
+        // Delete store
+        [HttpPost]
+        public JsonResult DeleteStore(int id)
+        {
+            try
+            {
+                Store store = db.Stores.Find(id);
+                db.Stores.Remove(store);
+                db.SaveChanges();
+            }
+            catch
+            {
+                return Json(new { Status = false }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { Status = true }, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

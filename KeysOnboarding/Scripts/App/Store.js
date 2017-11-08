@@ -1,4 +1,4 @@
-﻿function CustomerViewModel() {
+﻿function StoreViewModel() {
 
     //Make the self as 'this' reference
     var self = this;
@@ -7,47 +7,47 @@
     self.Name = ko.observable("");
     self.Address = ko.observable("");
 
-    var Customer = {
+    var Store = {
         Id: self.Id,
         Name: self.Name,
         Address: self.Address
     };
 
-    self.Customer = ko.observable();
-    self.Customers = ko.observableArray(); // Contains the list of customers
+    self.Store = ko.observable();
+    self.Stores = ko.observableArray(); // Contains the list of customers
 
     // Initialize the view-model
     $.ajax({
-        url: 'Customers/GetAllCustomers',
+        url: 'Stores/GetAllStores',
         cache: false,
         type: 'GET',
         contentType: 'application/json; charset=utf-8',
         data: {},
         success: function (data) {
-            self.Customers(data); //Put the response in ObservableArray
+            self.Stores(data); //Put the response in ObservableArray
         }
     });
 
-    self.edit = function (Customer) {
-        self.Customer(Customer);
+    self.edit = function (Store) {
+        self.Store(Store);
     };
 
-    self.delete = function (Customer) {
-        self.Customer(Customer);
+    self.delete = function (Store) {
+        self.Store(Store);
     };
 
     //Add New Item
     self.create = function () {
-        if (Customer.Name() != "" &&
-            Customer.Address() != "") {
+        if (Store.Name() != "" &&
+            Store.Address() != "") {
             $.ajax({
-                url: 'Customers/AddCustomer',
+                url: 'Stores/AddStore',
                 cache: false,
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
-                data: ko.toJSON(Customer),
+                data: ko.toJSON(Store),
                 success: function (data) {
-                    self.Customers.push(data);
+                    self.Stores.push(data);
                     self.Name("");
                     self.Address("");
                 }
@@ -61,19 +61,19 @@
         }
     }
 
-    // Delete Customer details
-    self.deleteConfirm = function (Customer) {
+    // Delete Store details
+    self.deleteConfirm = function (Store) {
 
-        var id = Customer.Id;
+        var id = Store.Id;
 
         $.ajax({
-            url: 'Customers/DeleteCustomer/' + id,
+            url: 'Stores/DeleteStore/' + id,
             cache: false,
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             data: id,
             success: function (data) {
-                self.Customers.remove(Customer);
+                self.Stores.remove(Store);
             }
         }).fail(
             function (xhr, textStatus, err) {
@@ -83,17 +83,17 @@
 
     // Update product details
     self.update = function () {
-        var Customer = self.Customer();
+        var Store = self.Store();
         $.ajax({
-            url: 'Customers/EditCustomer',
+            url: 'Stores/EditStore',
             cache: false,
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
-            data: ko.toJSON(Customer),
+            data: ko.toJSON(Store),
             success: function (data) {
-                self.Customers.removeAll();
-                self.Customers(data); //Put the response in ObservableArray
-                self.Customer(null);
+                self.Stores.removeAll();
+                self.Stores(data); //Put the response in ObservableArray
+                self.Store(null);
                 alert("Record Updated Successfully");
             }
         })
@@ -110,15 +110,15 @@
     }
 
     $("#myCreateModal").on("hide", function () {
-        self.Customer(new CustomerViewModel());
+        self.Store(new StoreViewModel());
     });
 
     $("#myEditModal").on("hide", function () {
-        self.Customer(new CustomerViewModel());
+        self.Store(new StoreViewModel());
     });
 
     $("#myDeleteModal").on("hide", function () {
-        self.Customer(new CustomerViewModel());
+        self.Store(new StoreViewModel());
     });
 }
-ko.applyBindings(new CustomerViewModel());
+ko.applyBindings(new StoreViewModel());
