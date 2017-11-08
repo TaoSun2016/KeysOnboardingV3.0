@@ -1,10 +1,4 @@
-﻿@model IEnumerable<KeysOnboarding.Models.Product>
-
-@{
-    ViewBag.Title = "Index";
-}
-
-<h2>Product List</h2>
+﻿<h2>Product List</h2>
 
 <p>
     <a id="btnCreate" href="#myCreateModal" data-toggle="modal" class="btn btn-success">Create New</a>
@@ -133,70 +127,6 @@
         </div>
     </div>
 </div>
-@*<div class="createUI" style="display:none" >
-        <div class="row">
-            <label for="name">Name</label>
-            <input data-bind="value: $root.Name" type="text" title="Name" />
-        </div>
-
-        <div>
-            <label for="price">Price</label>
-            <input data-bind="value: $root.Price" type="text" title="Price" />
-        </div>
-        <hr />
-        <div>
-            <button class="btn btn-success" data-bind="click: $root.create">Save</button>
-            <button class="btn btn-info" data-dismiss="modal" data-bind="click: $root.reset">Close</button>
-        </div>
-    </div>*@
-
-@*<div class="editUI" style="display:none" data-bind="with: Product">
-        <div>
-            <label for="productId">ID</label>
-            <label data-bind="text: Id"></label>
-
-        </div>
-        <div>
-            <label for="name">Name</label>
-            <input data-bind="value: Name" type="text" title="Name" />
-        </div>
-
-        <div>
-            <label for="price">Price</label>
-            <input data-bind="value: Price" type="text" title="Price" />
-
-        </div>
-        <br />
-        <div>
-            <button  class="btn btn-success" data-bind="click: $root.update">Update</button>
-            <button class="btn btn-info" data-dismiss="modal" data-bind="click: $root.cancel">Cancel</button>
-
-        </div>
-    </div>*@
-
-@*<div class="deleteUI" style="display:none" data-bind="with: Product">
-        <div>
-            <label for="productId">ID</label>
-            <label data-bind="text: Id"></label>
-
-        </div>
-        <div>
-            <label for="name">Name</label>
-            <label data-bind="text: Name"></label>
-        </div>
-
-        <div>
-            <label for="price">Price</label>
-            <label data-bind="text: Price"></label>
-
-        </div>
-        <br />
-        <div>
-            <button class="btn btn-success" data-bind="click: $root.deleteConfirm">Delete</button>
-            <button class="btn btn-info" data-dismiss="modal" data-bind="click: $root.cancel">Cancel</button>
-
-        </div>
-    </div>*@
 
 @section scripts{
     <script src="~/Scripts/App/Product.js"></script>

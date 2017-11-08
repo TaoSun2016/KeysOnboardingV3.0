@@ -24,6 +24,7 @@
         contentType: 'application/json; charset=utf-8',
         data: {},
         success: function (data) {
+            alert("sucess"+data);
             self.Customers(data); //Put the response in ObservableArray
         }
     });
@@ -110,15 +111,15 @@
     }
 
     $("#myCreateModal").on("hide", function () {
-        self.Product(new ProductViewModel());
+        self.Customer(new CustomerViewModel());
     });
 
     $("#myEditModal").on("hide", function () {
-        self.Product(new ProductViewModel());
+        self.Customer(new CustomerViewModel());
     });
 
     $("#myDeleteModal").on("hide", function () {
-        self.Product(new ProductViewModel());
+        self.Customer(new CustomerViewModel());
     });
 }
-ko.applyBindings(new ProductViewModel());
+ko.applyBindings(new CustomerViewModel());
