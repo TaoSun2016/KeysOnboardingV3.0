@@ -30,12 +30,6 @@
         }
     });
 
-    //$("#btnCreate").click(function (event) {
-    //    //self.OperationTitle("Create New Prodcut");
-    //    //$("#modal-content").empty();
-    //    //$("#modal-content").append($(".createUI").show());
-    //});
-
     self.edit = function (Product) {
         self.Product(Product);
     };

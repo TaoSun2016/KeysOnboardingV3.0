@@ -41,17 +41,14 @@ namespace KeysOnboarding.Controllers
 
 
         [HttpPost]
-        public JsonResult EditProduct(int id, Product item)
+        public JsonResult EditProduct(Product item)
         {
-            item.Id = id;
             try
             {
                 if (item == null)
                 {
                     throw new ArgumentNullException("item");
                 }
-
-                // TO DO : Code to update record into database
 
                 var product = db.Products.Single(a => a.Id == item.Id);
                 product.Name = item.Name;
