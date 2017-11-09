@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using KeysOnboarding.Models;
+using Newtonsoft.Json;
 
 namespace KeysOnboarding.Controllers
 {
@@ -21,10 +22,12 @@ namespace KeysOnboarding.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetAllProductSolds()
+        public JsonResultExtension GetAllProductSolds()
         {
             var productSolds = db.ProductSolds.Include(p => p.Customer).Include(p => p.Product).Include(p => p.Store);
-            return Json(productSolds, JsonRequestBehavior.AllowGet);
+            //var jsonResult = JsonConvert.SerializeObject(productSolds);
+           
+            return new JsonResultExtension(productSolds,"dd/MM/yyyy");
         }
 
         // GET: ProductSolds/Details/5

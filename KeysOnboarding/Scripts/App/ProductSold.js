@@ -26,16 +26,16 @@
         this.Address = address;
     };
 
-    var ProductSold = function(id, product, customer, store, datesold){
-        this.Id = id;
-        this.ProductId = product.Id;
-        this.CustomerId = customer.Id;
-        this.StoreId = store.Id;
-        this.Datesold = datesold;
-        this.Product = product;
-        this.Customer = customer;
-        this.Store = store;
-    };
+    //var ProductSold = function(id, product, customer, store, datesold){
+    //    this.Id = id;
+    //    this.ProductId = product.Id;
+    //    this.CustomerId = customer.Id;
+    //    this.StoreId = store.Id;
+    //    this.Datesold = parseInt(datesold.substr(6));
+    //    this.Product = product;
+    //    this.Customer = customer;
+    //    this.Store = store;
+    //};
 
     self.ProductSoldDetail = ko.observable();
     self.ProductSoldDetails = ko.observableArray();
