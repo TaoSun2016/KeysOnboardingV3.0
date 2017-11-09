@@ -17,8 +17,14 @@ namespace KeysOnboarding.Controllers
         // GET: ProductSolds
         public ActionResult Index()
         {
+            return View();
+        }
+
+        [HttpGet]
+        public JsonResult GetAllProductSolds()
+        {
             var productSolds = db.ProductSolds.Include(p => p.Customer).Include(p => p.Product).Include(p => p.Store);
-            return View(productSolds.ToList());
+            return Json(productSolds, JsonRequestBehavior.AllowGet);
         }
 
         // GET: ProductSolds/Details/5

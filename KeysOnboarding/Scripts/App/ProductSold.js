@@ -40,8 +40,8 @@
     self.ProductSoldDetail = ko.observable();
     self.ProductSoldDetails = ko.observableArray();
 
-    self.Customer = ko.observable();
-    self.Customers = ko.observableArray(); // Contains the list of customers
+    //self.Customer = ko.observable();
+    //self.Customers = ko.observableArray(); // Contains the list of customers
 
     // Initialize the view-model
     $.ajax({
@@ -55,12 +55,12 @@
         }
     });
 
-    self.edit = function (Customer) {
-        self.Customer(Customer);
+    self.edit = function (ProductSoldDetail) {
+        //self.Customer(Customer);
     };
 
-    self.delete = function (Customer) {
-        self.Customer(Customer);
+    self.delete = function (ProductSoldDetail) {
+        //self.Customer(Customer);
     };
 
     //Add New Item
@@ -89,7 +89,7 @@
     }
 
     // Delete Customer details
-    self.deleteConfirm = function (Customer) {
+    self.deleteConfirm = function (ProductSoldDetail) {
 
         var id = Customer.Id;
 
