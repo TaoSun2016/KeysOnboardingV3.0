@@ -1,47 +1,22 @@
-﻿function ProductSoldViewModel() {
+﻿$(function () {
+    $("#datepicker").datepicker();
+});
+function ProductSoldViewModel() {
 
     //Make the self as 'this' reference
     var self = this;
-    //Declare observable which will be bind with UI
-    self.Id = ko.observable("");
-    self.Name = ko.observable("");
-    self.Address = ko.observable("");
-
-
-    var Product = function(id, name, price){
-        this.Id = id;
-        this.Name = name;
-        this.Price = price;
-    };
-
-    var Customer = function (id, name, address) {
-        this.Id = id;
-        this.Name = name;
-        this.Address = address;
-    };
-
-    var Store = function (id, name, address) {
-        this.Id = id;
-        this.Name = name;
-        this.Address = address;
-    };
-
-    //var ProductSold = function(id, product, customer, store, datesold){
-    //    this.Id = id;
-    //    this.ProductId = product.Id;
-    //    this.CustomerId = customer.Id;
-    //    this.StoreId = store.Id;
-    //    this.Datesold = parseInt(datesold.substr(6));
-    //    this.Product = product;
-    //    this.Customer = customer;
-    //    this.Store = store;
-    //};
+    self.DateSold = ko.observable("");
 
     self.ProductSoldDetail = ko.observable();
     self.ProductSoldDetails = ko.observableArray();
 
-    //self.Customer = ko.observable();
-    //self.Customers = ko.observableArray(); // Contains the list of customers
+    self.ProductList = ko.observableArray();
+    self.CustomerList = ko.observableArray();
+    self.StoreList = ko.observableArray();
+
+    self.SelectedProduct = ko.observable();
+    self.SelectedCustomer = ko.observable();
+    self.SelectedStore = ko.observable();
 
     // Initialize the view-model
     $.ajax({
@@ -55,8 +30,43 @@
         }
     });
 
+    self.dropdownList = function () {
+        $.ajax({
+            url: 'Products/GetAllProducts',
+            cache: false,
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            data: {},
+            success: function (data) {
+                self.ProductList(data); //Put the response in ObservableArray
+            }
+        });
+
+        $.ajax({
+            url: 'Customers/GetAllCustomers',
+            cache: false,
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            data: {},
+            success: function (data) {
+                self.CustomerList(data); //Put the response in ObservableArray
+            }
+        });
+
+        $.ajax({
+            url: 'Stores/GetAllStores',
+            cache: false,
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            data: {},
+            success: function (data) {
+                self.StoreList(data); //Put the response in ObservableArray
+            }
+        });
+    }
+
     self.edit = function (ProductSoldDetail) {
-        //self.Customer(Customer);
+        self.dropdownList();
     };
 
     self.delete = function (ProductSoldDetail) {
@@ -65,29 +75,37 @@
 
     //Add New Item
     self.create = function () {
-        if (Customer.Name() != "" &&
-            Customer.Address() != "") {
-            $.ajax({
-                url: 'Customers/AddCustomer',
-                cache: false,
-                type: 'POST',
-                contentType: 'application/json; charset=utf-8',
-                data: ko.toJSON(Customer),
-                success: function (data) {
-                    self.Customers.push(data);
-                    self.Name("");
-                    self.Address("");
-                }
-            }).fail(
-                function (xhr, textStatus, err) {
-                    alert(err);
-                });
-        }
-        else {
-            alert('Please Enter All the Values !!');
-        }
+        self.ProductSoldDetail({
+            ProductId: self.SelectedProduct().Id,
+            CustomerId: self.SelectedCustomer().Id,
+            StoreId: self.SelectedStore().Id,
+            DateSold: self.DateSold,
+            Product: self.SelectedProduct(),
+            Customer: self.SelectedCustomer(),
+            Store: self.SelectedStore()
+        });
+
+        $.ajax({
+            url: 'ProductSolds/AddProductSold',
+            cache: false,
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: ko.toJSON(self.ProductSoldDetail),
+            success: function (data) {
+                self.ProductSoldDetails.push(data);
+                self.SelectedProduct(null);
+                self.SelectedCustomer(null);
+                self.SelectedStore(null);
+                self.DateSold('');
+            }
+        }).fail(
+            function (xhr, textStatus, err) {
+                alert(err);
+            });
+
     }
 
+ 
     // Delete Customer details
     self.deleteConfirm = function (ProductSoldDetail) {
 
@@ -132,12 +150,15 @@
 
     // Reset product details
     self.reset = function () {
-        self.Name("");
-        self.Address("");
     }
 
     $("#myCreateModal").on("hide", function () {
-        self.Customer(new ProductSoldViewModel());
+
+
+        self.SelectedProduct = null;
+        self.SelectedCustomer = null;
+        self.SelectedStore = null;
+        self.DateSold = null;
     });
 
     $("#myEditModal").on("hide", function () {
