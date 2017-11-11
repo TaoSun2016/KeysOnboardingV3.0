@@ -44,67 +44,48 @@ namespace KeysOnboarding.Controllers
             db.SaveChanges();
             return new JsonResultExtension(item, "dd/MM/yyyy"); ;
         }
-        // GET: ProductSolds/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ProductSold productSold = db.ProductSolds.Find(id);
-            if (productSold == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CustomerId = new SelectList(db.Customers, "Id", "Name", productSold.CustomerId);
-            ViewBag.ProductId = new SelectList(db.Products, "Id", "Name", productSold.ProductId);
-            ViewBag.StoreId = new SelectList(db.Stores, "Id", "Name", productSold.StoreId);
-            return View(productSold);
-        }
 
-        // POST: ProductSolds/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ProductId,CustomerId,StoreId,DateSold")] ProductSold productSold)
+        public JsonResult EditProductSold(ProductSold item)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(productSold).State = EntityState.Modified;
+                if (item == null)
+                {
+                    throw new ArgumentNullException("item");
+                }
+
+                var productSold = db.ProductSolds.Single(a => a.Id == item.Id);
+
+                productSold.ProductId = item.ProductId;
+                productSold.CustomerId = item.CustomerId;
+                productSold.StoreId = item.StoreId;
+
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
-            ViewBag.CustomerId = new SelectList(db.Customers, "Id", "Name", productSold.CustomerId);
-            ViewBag.ProductId = new SelectList(db.Products, "Id", "Name", productSold.ProductId);
-            ViewBag.StoreId = new SelectList(db.Stores, "Id", "Name", productSold.StoreId);
-            return View(productSold);
+            catch
+            {
+                return Json(null);
+            }
+            return new JsonResultExtension(db.ProductSolds, "dd/MM/yyyy");
+
         }
 
-        // GET: ProductSolds/Delete/5
-        public ActionResult Delete(int? id)
+        [HttpPost]
+        public JsonResult DeleteProductSold(int id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ProductSold productSold = db.ProductSolds.Find(id);
+                db.ProductSolds.Remove(productSold);
+                db.SaveChanges();
             }
-            ProductSold productSold = db.ProductSolds.Find(id);
-            if (productSold == null)
+            catch
             {
-                return HttpNotFound();
+                return Json(new { Status = false }, JsonRequestBehavior.AllowGet);
             }
-            return View(productSold);
-        }
 
-        // POST: ProductSolds/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            ProductSold productSold = db.ProductSolds.Find(id);
-            db.ProductSolds.Remove(productSold);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            return Json(new { Status = true }, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

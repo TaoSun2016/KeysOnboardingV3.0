@@ -86,7 +86,7 @@
     // Update product details
     self.update = function () {
         var Product = self.Product();
-        console.log("[" + ko.toJSON(Product)+"]");
+        
         $.ajax({
             url: 'Products/EditProduct',
             cache: false,

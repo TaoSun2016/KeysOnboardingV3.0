@@ -7,8 +7,8 @@
     <thead>
         <tr>
             <th style="display: none;">ID</th>
-            <th>Customer Name</th>
             <th>Product Name</th>
+            <th>Customer Name</th>          
             <th>Store Name</th>
             <th>Date Sold</th>
             <th>Actions</th>
@@ -17,13 +17,13 @@
     <tbody data-bind="foreach: ProductSoldDetails">
         <tr>
             <td data-bind="visible:false, text: Id "></td>
-            <td data-bind="text: Customer.Name"></td>
             <td data-bind="text: Product.Name"></td>
+            <td data-bind="text: Customer.Name"></td>           
             <td data-bind="text: Store.Name"></td>
             <td data-bind="text: DateSold"></td>
             <td>
-                <a id="btnEdit" class="btn btn-info" data-toggle="modal" href="#myEditModal" data-bind="click: $root.dropdownList">Edit</a>
-                <a id="btnDelete" class="btn btn-danger" data-toggle="modal" href="#myDeleteModal" data-bind="click: $root.dropdownList">Delete</a>
+                <a id="btnEdit" class="btn btn-info" data-toggle="modal" href="#myEditModal" data-bind="click: $root.edit">Edit</a>
+                <a id="btnDelete" class="btn btn-danger" data-toggle="modal" href="#myDeleteModal" data-bind="click: $root.delete">Delete</a>
             </td>
         </tr>
     </tbody> 
@@ -76,6 +76,91 @@
         </div>
     </div>
 </div>
+
+<div id="myEditModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Product Sold Record</h4>
+            </div>
+            <div class="modal-body">
+                <div id="modal-content">
+                    <div class="row">
+                        <label for="nameProduct" class="col-sm-4">Product Name</label>
+                        <select data-bind="options: ProductList,
+                                           optionsText:'Name',
+                                           value: SelectedProduct"></select>
+                    </div>
+
+                    <div class="row">
+                        <label for="nameCustomer" class="col-sm-4">Customer Name</label>
+                        <select data-bind="options: CustomerList,
+                                           optionsText:'Name',
+                                           value: SelectedCustomer"></select>
+                    </div>
+
+                    <div class="row">
+                        <label for="nameStore" class="col-sm-4">Store Name</label>
+                        <select data-bind="options: StoreList,
+                                           optionsText:'Name',
+                                           value: SelectedStore"></select>
+                    </div>
+                    <div class="row">
+                        <label for="dateSold" class="col-sm-4">Date Sold</label>
+                        <input id="datepicker" data-bind="value: $root.DateSold" type="text" title="dateSold" />
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <button class="btn btn-success col-sm-offset-2" data-dismiss="modal" data-bind="click: $root.update">Update</button>
+                        <button class="btn btn-info" data-dismiss="modal" data-bind="click: $root.cancel">Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myDeleteModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Product Sold Record</h4>
+            </div>
+            <div class="modal-body">
+                <div id="modal-content" data-bind="with: ProductSoldDetail">
+                    <div class="row">
+                        <label for="nameProduct" class="col-sm-4">Product Name</label>
+                        <lable data-bind="text: Product.Name"></lable>
+                    </div>
+
+                    <div class="row">
+                        <label for="nameCustomer" class="col-sm-4">Customer Name</label>
+                        <lable data-bind="text: Customer.Name"></lable>
+                    </div>
+
+                    <div class="row">
+                        <label for="nameStore" class="col-sm-4">Store Name</label>
+                        <lable data-bind="text: Store.Name"></lable>
+                    </div>
+                    <div class="row">
+                        <label for="dateSold" class="col-sm-4">Date Sold</label>
+                        <lable data-bind="text: DateSold"></lable>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <button class="btn btn-success col-sm-offset-2" data-dismiss="modal" data-bind="click: $root.deleteConfirm">Delete</button>
+                        <button class="btn btn-info" data-dismiss="modal" data-bind="click: $root.cancel">Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 @section scripts{

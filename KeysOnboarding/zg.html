@@ -13,33 +13,27 @@
 </head>
 <body>
     <div>
-        <select data-bind="options: peopleList,
-　　　　　　　　　　　　　　  optionsText: 'name', 
-                            optionsValue:'id',
-                            value: selectedPeople, 
-                            optionsCaption: '选择人员...'"></select>
+        Dummy
+        <select id="dummy" data-bind="options: DummyOptions, optionsText: 'Message',value: selectedValue"></select>
     </div>
-
     <script>
 
-        function MyViewModel() {
-            var self = this;  //用self替代this
-            self.peopleList = ko.observableArray([
-                { name: "张三", id: "1" },
-                { name: "李四", id: "2" },
-                { name: "王五", id: "3" }
-            ]); //监控数组
-            self.selectedPeople = ko.observable(0); //记录已选中的人员值
-            self.peopleChange = function () //选择某个选项后的事件。
-            {
-                alert(self.selectedPeople());
+        function ViewModel() {
 
-            }
+            this.DummyOptions = ko.observableArray([{ isSelected: 1, Message: "Test1" }, { isSelected: 2, Message: "Test2" }]);
+           
+
+
+            //var selectedOption = ko.utils.arrayFirst(this.DummyOptions(), function (item) {
+            //    return item.isSelected;
+            //});
+
+            // Use this option as the initial value
+            this.selectedValue = ko.observable({ isSelected: 2, Message: "Test2" });
 
         }
-        $(function () {
-            ko.applyBindings(new MyViewModel());
-        });
+
+        ko.applyBindings(new ViewModel());
     </script>
 </body>
 </html>
