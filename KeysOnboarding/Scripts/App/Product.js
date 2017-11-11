@@ -1,21 +1,39 @@
-﻿function ProductViewModel() {
+﻿ko.extenders.required = function (target, overrideMessage) {
+    //add some sub-observables to our observable
+    target.hasError = ko.observable();
+    target.validationMessage = ko.observable();
+
+    //define a function to do validation
+    function validate(newValue) {
+        target.hasError(newValue ? false : true);
+        target.validationMessage(newValue ? "" : overrideMessage || "This field is required");
+    }
+
+    //initial validation
+    validate(target());
+
+    //validate whenever the value changes
+    target.subscribe(validate);
+
+    //return the original observable
+    return target;
+};
+
+
+function ProductViewModel() {
 
     //Make the self as 'this' reference
     var self = this;
     //Declare observable which will be bind with UI
     self.Id = ko.observable("");
-    self.Name = ko.observable("");
-    self.Price = ko.observable("");
+    self.Name = ko.observable("").extend({  required: ""});
+    self.Price = ko.observable("").extend({ required: "" });
 
     self.OperationTitle = ko.observable("");
 
-    var Product = {
-        Id: self.Id,
-        Name: self.Name,
-        Price: self.Price
-    };
 
     self.Product = ko.observable();
+
     self.Products = ko.observableArray(); // Contains the list of products
 
     // Initialize the view-model
@@ -30,8 +48,8 @@
         }
     });
 
-    self.edit = function (Product) {
-        self.Product(Product);
+    self.edit = function (item) {
+        self.Product(item);
     };
 
     self.delete = function (Product) {

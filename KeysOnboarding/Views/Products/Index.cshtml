@@ -38,12 +38,14 @@
                 <div id="modal-content">
                     <div class="row">
                         <label for="name" class="col-sm-2">Name</label>
-                        <input data-bind="value: $root.Name" type="text" title="Name" />
+                        <input data-bind="value: $root.Name, valueUpdate: 'afterkeydown'" type="text" title="Name" />
+                        <span data-bind='visible: $root.Name.hasError, text: $root.Name.validationMessage'> </span>
                     </div>
                     <br />
                     <div class="row">
                         <label for="price" class="col-sm-2">Price</label>
-                        <input data-bind="value: $root.Price" type="text" title="Price"/>
+                        <input data-bind="value: $root.Price, valueUpdate: 'afterkeydown'" type="text" title="Price"/>
+                        <span data-bind='visible: $root.Price.hasError, text: $root.Price.validationMessage'> </span>
                     </div>
                     <hr />
                     <div class="row">
@@ -73,12 +75,14 @@
                     <br />
                     <div class="row">
                         <label for="name" class="col-sm-2">Name</label>
-                        <input data-bind="value: Name" type="text" title="Name" />
+                        <input data-bind="value: Name, valueUpdate: 'afterkeydown'" type="text" title="Name" />
+                        @*<span data-bind='visible: hasErrorName, text: validationMessageName'> </span>*@
                     </div>
                     <br />
                     <div class="row">
                         <label for="price" class="col-sm-2">Price</label>
-                        <input data-bind="value: Price" type="text" title="Price" />
+                        <input data-bind="value: Price, valueUpdate: 'afterkeydown'" type="text" title="Price" />
+                        @*<span data-bind='visible: $root.Price.hasError, text: $root.Price.validationMessage'> </span>*@
                     </div>
                     <hr />
                     <div class="row">
