@@ -83,9 +83,10 @@ function ProductSoldViewModel() {
             data: {},
             success: function (data) {
                 self.ProductList(data); //Put the response in ObservableArray
-                //self.SelectedProduct = ko.observable(ko.utils.arrayFirst(self.ProductList(), function (item) {
-                //return item.Id == detail.Product.Id;
-                //}));
+                self.SelectedProduct = ko.observable(ko.utils.arrayFirst(self.ProductList(), function (item) {
+                   return item.Id == detail.Product.Id;
+                }));
+                console.log(self.SelectedProduct());
             }
         });
 
@@ -220,11 +221,11 @@ function ProductSoldViewModel() {
         self.ProductSoldDetail(null);
     }
     self.cancel = function () {
-        self.SelectedProduct(null);
-        self.SelectedCustomer(null);
-        self.SelectedStore(null);
-        self.DateSold(null);
-        self.ProductSoldDetail(null);
+        //self.SelectedProduct(null);
+        //self.SelectedCustomer(null);
+        //self.SelectedStore(null);
+        //self.DateSold(null);
+        //self.ProductSoldDetail(null);
     }
 
     $("#myCreateModal").on("hide", function () {

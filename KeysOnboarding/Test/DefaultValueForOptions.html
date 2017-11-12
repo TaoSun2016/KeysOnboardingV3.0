@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <title>select</title>
+
+    <script src="../Scripts/knockout-3.4.2.js"></script>
+    <script src="../Scripts/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+    <div>
+        Dummy
+        <select id="dummy" data-bind="options: DummyOptions, optionsText: 'Message',value: selectedValue"></select>
+        <select id="dummy1" data-bind="options: DummyOptions1, optionsText: 'Message',value: selectedValue1"></select>
+        <select id="dummy2" data-bind="options: DummyOptions2, optionsText: 'Message',value: selectedValue2"></select>
+        <select id="dummy3" data-bind="options: DummyOptions3, optionsText: 'Message',value: selectedValue3"></select>
+        <select id="dummy4" data-bind="options: DummyOptions4, optionsText: 'Message',value: selectedValue4"></select>
+    </div>
+    <script>
+
+        function ViewModel() {
+
+            //Good
+            console.log("Good===============================");
+            this.DummyOptions = ko.observableArray([{ isSelected: false, Message: "Test1" }, { isSelected: true, Message: "Test2" }]);
+            console.log("Good:" +this.DummyOptions()[1]);
+            this.selectedValue = ko.utils.arrayFirst(this.DummyOptions(), function (item) {
+                return item.isSelected;
+            });
+            console.log(this.selectedValue);
+
+            //Test1  not work
+            console.log("Test1===============================");
+            this.DummyOptions1 = ko.observableArray([{ isSelected: false, Message: "Test1" }, { isSelected: true, Message: "Test2" }]);
+            console.log(this.DummyOptions1()[1]);
+            this.selectedValue1 = { isSelected: true, Message: "Test2" };
+            console.log(this.selectedValue1);
+
+
+            //Test2
+            console.log("Test2===============================");
+            this.DummyOptions2 = ko.observableArray([{ isSelected: 1, Message: "Test1" }, { isSelected: 2, Message: "Test2" }]);
+            console.log(this.DummyOptions2()[1]);
+            this.selectedValue2 = ko.utils.arrayFirst(this.DummyOptions2(), function (item) {
+                return item.isSelected == 2;
+            });
+            console.log(this.selectedValue2);
+
+
+            //Test3
+            console.log("Test3===============================");
+            this.DummyOptions3 = ko.observableArray([{ isSelected: 1, Message: "Test1" }, { isSelected: 2, Message: "Test2" }]);
+            console.log(this.DummyOptions3()[1]);
+            this.selectedValue3 = ko.utils.arrayFirst(this.DummyOptions3(), function (item) {
+                return item.Message == "Test2";
+            });
+            console.log(this.selectedValue3);
+
+
+            //Test4
+            console.log("Test4===============================");
+            this.DummyOptions4 = ko.observableArray([{ aa: 1, Message: "Test1" }, { aa: 2, Message: "Test2" }]);
+            console.log(this.DummyOptions4()[1]);
+            this.selectedValue4 = ko.utils.arrayFirst(this.DummyOptions4(), function (item) {
+                return item.Message == "Test2";
+            });
+            console.log(this.selectedValue4);
+
+        }
+
+        ko.applyBindings(new ViewModel());
+
+    </script>
+</body>
+</html>
