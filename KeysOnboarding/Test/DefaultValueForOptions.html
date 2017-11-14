@@ -35,7 +35,7 @@
             console.log("Test1===============================");
             this.DummyOptions1 = ko.observableArray([{ isSelected: false, Message: "Test1" }, { isSelected: true, Message: "Test2" }]);
             console.log(this.DummyOptions1()[1]);
-            this.selectedValue1 = { isSelected: true, Message: "Test2" };
+            this.selectedValue1 = new { isSelected: true, Message: "Test2" };
             console.log(this.selectedValue1);
 
 

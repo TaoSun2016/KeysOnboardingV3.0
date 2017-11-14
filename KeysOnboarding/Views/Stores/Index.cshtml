@@ -1,12 +1,11 @@
 ﻿<h2>Store List</h2>
 
 <p>
-    <a id="btnCreate" href="#myCreateModal" data-toggle="modal" class="btn btn-success">Create New</a>
+    <a id="btnCreate" href="#myCreateModal" data-toggle="modal" class="btn btn-success" data-bind="click: $root.showAddUI">Create New</a>
 </p>
-<table class="table table-striped table-hover table-condensed">
+<table class="table table-striped table-hover table-bordered">
     <thead>
         <tr>
-            <th style="display: none;">ID</th>
             <th>Name</th>
             <th>Addrress</th>
             <th>Actions</th>
@@ -15,19 +14,18 @@
 
     <tbody data-bind="foreach: Stores">
         <tr>
-            <td data-bind="visible:false, text: Id "></td>
             <td data-bind="text: Name"></td>
             <td data-bind="text: Address"></td>
             <td>
-                <a id="btnEdit" class="btn btn-info" data-toggle="modal" href="#myEditModal" data-bind="click: $root.edit">Edit</a>
-                <a id="btnDelete" class="btn btn-danger" data-toggle="modal" href="#myDeleteModal" data-bind="click: $root.delete">Delete</a>
+                <a id="btnEdit" class="btn btn-info" data-toggle="modal" href="#myEditModal" data-bind="click: $root.showEditUI">Edit</a>
+                <a id="btnDelete" class="btn btn-danger" data-toggle="modal" href="#myDeleteModal" data-bind="click: $root.showDeleteUI">Delete</a>
             </td>
         </tr>
     </tbody>
 
 </table>
 
-<div id="myCreateModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="myLargeModalLabel">
+<div id="myCreateModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -35,22 +33,21 @@
                 <h4 class="modal-title">Create New Store</h4>
             </div>
             <div class="modal-body">
-                <div id="modal-content">
+                <div id="modal-content" data-bind="with: Store">
                     <div class="row">
                         <label for="name" class="col-sm-2">Name</label>
-                        <input data-bind="value: $root.Name" type="text" title="Name" />
+                        <input data-bind="value: Name, valueUpate: 'afterkeydown'" type="text" title="Name" />
                     </div>
                     <br />
                     <div class="row">
                         <label for="address" class="col-sm-2">Address</label>
-                        <input data-bind="value: $root.Address" type="text" title="Address" />
+                        <input data-bind="value: Address, valueUpate: 'afterkeydown'" type="text" title="Address" />
                     </div>
                     <hr />
                     <div class="row">
                         <button class="btn btn-success col-sm-offset-2" data-bind="click: $root.create">Save</button>
-                        <button class="btn btn-info" data-dismiss="modal" data-bind="click: $root.reset">Close</button>
+                        <button class="btn btn-info" data-dismiss="modal">Close</button>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -68,22 +65,21 @@
                     <div class="row">
                         <label for="storeId" class="col-sm-2">ID</label>
                         <label data-bind="text: Id"></label>
-
                     </div>
                     <br />
                     <div class="row">
                         <label for="name" class="col-sm-2">Name</label>
-                        <input data-bind="value: Name" type="text" title="Name" />
+                        <input data-bind="value: Name, valueUpate: 'afterkeydown'" type="text" title="Name" />
                     </div>
                     <br />
                     <div class="row">
-                        <label for="address" class="col-sm-2">Price</label>
-                        <input data-bind="value: Address" type="text" title="Address" />
+                        <label for="address" class="col-sm-2">Address</label>
+                        <input data-bind="value: Address, valueUpate: 'afterkeydown'" type="text" title="Address" />
                     </div>
                     <hr />
                     <div class="row">
-                        <button class="btn btn-success col-sm-offset-2" data-dismiss="modal" data-bind="click: $root.update">Update</button>
-                        <button class="btn btn-info" data-dismiss="modal" data-bind="click: $root.cancel">Cancel</button>
+                        <button class="btn btn-success col-sm-offset-2" data-bind="click: $root.update">Update</button>
+                        <button class="btn btn-info" data-dismiss="modal">Cancel</button>
 
                     </div>
                 </div>
@@ -118,8 +114,8 @@
                     </div>
                     <br />
                     <div class="row">
-                        <button class="btn btn-success col-sm-offset-2" data-dismiss="modal" data-bind="click: $root.deleteConfirm">Delete</button>
-                        <button class="btn btn-info" data-dismiss="modal" data-bind="click: $root.cancel">Cancel</button>
+                        <button class="btn btn-success col-sm-offset-2" data-dismiss="modal" data-bind="click: $root.delete">Delete</button>
+                        <button class="btn btn-info" data-dismiss="modal">Cancel</button>
 
                     </div>
                 </div>

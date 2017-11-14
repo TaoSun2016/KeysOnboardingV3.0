@@ -1,20 +1,39 @@
-﻿function StoreViewModel() {
+﻿var nullStore = {
+    Id: '',
+    Name: '',
+    Address: ''
+};
 
-    //Make the self as 'this' reference
+function StoreViewModel(data) {
+    self = this;
+    self.Id = data.Id;
+    self.Name = ko.observable(data.Name).extend({
+        required: {
+            params: true,
+            message: "Please input store's name!"
+        }
+    });
+
+    self.Address = ko.observable(data.Address).extend({
+        required: {
+            params: true,
+            message: "Please input store's address!"
+        }
+    });
+
+    self.ModelErrors = ko.validation.group(self);
+    self.IsValid = ko.computed(function () {
+        self.ModelErrors.showAllMessages();
+        return self.ModelErrors().length == 0;
+    });
+
+};
+function StoresViewModel() {
+
     var self = this;
-    //Declare observable which will be bind with UI
-    self.Id = ko.observable("");
-    self.Name = ko.observable("");
-    self.Address = ko.observable("");
-
-    var Store = {
-        Id: self.Id,
-        Name: self.Name,
-        Address: self.Address
-    };
 
     self.Store = ko.observable();
-    self.Stores = ko.observableArray(); // Contains the list of customers
+    self.Stores = ko.observableArray();
 
     // Initialize the view-model
     $.ajax({
@@ -24,32 +43,35 @@
         contentType: 'application/json; charset=utf-8',
         data: {},
         success: function (data) {
-            self.Stores(data); //Put the response in ObservableArray
+            self.Stores(data);
         }
     });
 
-    self.edit = function (Store) {
-        self.Store(Store);
+    self.showAddUI = function () {
+        self.Store(new StoreViewModel(nullStore));
+    }
+
+    self.showEditUI = function (store) {
+        self.Store(new StoreViewModel(store));
     };
 
-    self.delete = function (Store) {
-        self.Store(Store);
+    self.showDeleteUI = function (store) {
+        self.Store(store);
     };
 
     //Add New Item
     self.create = function () {
-        if (Store.Name() != "" &&
-            Store.Address() != "") {
+        if (self.Store().Name() != "" &&
+            self.Store().Address() != "") {
             $.ajax({
                 url: 'Stores/AddStore',
                 cache: false,
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
-                data: ko.toJSON(Store),
+                data: ko.toJSON(self.Store),
                 success: function (data) {
                     self.Stores.push(data);
-                    self.Name("");
-                    self.Address("");
+                    self.Store(new StoreViewModel(nullStore));
                 }
             }).fail(
                 function (xhr, textStatus, err) {
@@ -61,11 +83,36 @@
         }
     }
 
+    // Update product details
+    self.update = function () {
+        if (self.Store().Name() != "" &&
+            self.Store().Address() != "") {
+            $.ajax({
+                url: 'Stores/EditStore',
+                cache: false,
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                data: ko.toJSON(self.Store),
+                success: function (data) {
+                    self.Stores.removeAll();
+                    self.Stores(data); 
+                    self.Store(new StoreViewModel(nullStore));
+                    alert("Record Updated Successfully");
+                    $('#myEditModal').modal('hide');
+                }
+            }).fail(
+                function (xhr, textStatus, err) {
+                    alert(err);
+                });
+        }
+        else {
+            // alert('Please Enter All the Values !!');
+        }
+    }
+
     // Delete Store details
-    self.deleteConfirm = function (Store) {
-
-        var id = Store.Id;
-
+    self.delete = function (store) {
+        var id = store.Id;
         $.ajax({
             url: 'Stores/DeleteStore/' + id,
             cache: false,
@@ -73,7 +120,7 @@
             contentType: 'application/json; charset=utf-8',
             data: id,
             success: function (data) {
-                self.Stores.remove(Store);
+                self.Stores.remove(store);
             }
         }).fail(
             function (xhr, textStatus, err) {
@@ -81,44 +128,6 @@
             });
     }
 
-    // Update product details
-    self.update = function () {
-        var Store = self.Store();
-        $.ajax({
-            url: 'Stores/EditStore',
-            cache: false,
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            data: ko.toJSON(Store),
-            success: function (data) {
-                self.Stores.removeAll();
-                self.Stores(data); //Put the response in ObservableArray
-                self.Store(null);
-                alert("Record Updated Successfully");
-            }
-        })
-            .fail(
-            function (xhr, textStatus, err) {
-                alert(err);
-            });
-    }
 
-    // Reset product details
-    self.reset = function () {
-        self.Name("");
-        self.Address("");
-    }
-
-    $("#myCreateModal").on("hide", function () {
-        self.Store(new StoreViewModel());
-    });
-
-    $("#myEditModal").on("hide", function () {
-        self.Store(new StoreViewModel());
-    });
-
-    $("#myDeleteModal").on("hide", function () {
-        self.Store(new StoreViewModel());
-    });
 }
-ko.applyBindings(new StoreViewModel());
+ko.applyBindings(new StoresViewModel());

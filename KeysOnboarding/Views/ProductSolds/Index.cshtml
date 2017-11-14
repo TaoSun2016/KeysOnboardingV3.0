@@ -77,7 +77,7 @@
     </div>
 </div>
 
-<div id="myEditModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="myLargeModalLabel">
+<div id="myEditModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="myLargeModalLabel"  >
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -85,12 +85,12 @@
                 <h4 class="modal-title">Edit Product Sold Record</h4>
             </div>
             <div class="modal-body">
-                <div id="modal-content">
+                <div id="modal-content" data-bind="with: ProductSoldDetail">
                     <div class="row">
                         <label for="nameProduct" class="col-sm-4">Product Name</label>
-                        <select data-bind="options: ProductList,
+                        <select data-bind="options: $root.ProductList,
                                            optionsText:'Name',
-                                           value: SelectedProduct"></select>
+                                           value: $root.SelectedProduct"></select>
                     </div>
 
                     <div class="row">

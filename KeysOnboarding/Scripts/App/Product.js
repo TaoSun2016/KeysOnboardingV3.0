@@ -1,19 +1,35 @@
-﻿function ProductViewModel() {
+﻿var nullProduct = {
+    Id: '',
+    Name: '',
+    Price: ''
+};
 
-    //Make the self as 'this' reference
+function ProductViewModel(data) {
+    self = this;
+
+    self.Id = data.Id;
+    self.Name = ko.observable(data.Name).extend({
+        required: {
+            params: true,
+            message: "Please input product name!"
+        }
+    });
+    self.Price = ko.observable(data.Price).extend({
+        required: {
+            params: true,
+            message: "Please input product price!"
+        }
+    });
+
+    self.ModelErrors = ko.validation.group(self);
+    self.IsValid = ko.computed(function () {
+        self.ModelErrors.showAllMessages();
+        return self.ModelErrors().length == 0;
+    });
+}
+function ProductsViewModel() {
+
     var self = this;
-    //Declare observable which will be bind with UI
-    self.Id = ko.observable("");
-    self.Name = ko.observable("").extend({  required: true});
-    self.Price = ko.observable("").extend({ required: true });
-
-    var Product = {
-        Id: self.Id,
-        Name: self.Name,
-        Price: self.Price
-    };
-
-
 
     self.Product = ko.observable();
 
@@ -31,28 +47,25 @@
         }
     });
 
-    self.edit = function (item) {
-        self.Product(item);
+    //Show create window
+    self.showAddUI = function () {
+        self.Product(new ProductViewModel(nullProduct));
     };
 
-    self.delete = function (Product) {
-        self.Product(Product);
-    };
-
-    //Add New Item
+    //Add new product
     self.create = function () {
-        if (Product.Name() != "" &&
-            Product.Price() != "") {
+        if (self.Product().Name() != "" &&
+            self.Product().Price() != "") {
             $.ajax({
                 url: 'Products/AddProduct',
                 cache: false,
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
-                data: ko.toJSON(Product),
+                data: ko.toJSON(self.Product),
                 success: function (data) {
+                    alert("Create new product successfully!");
                     self.Products.push(data);
-                    self.Name("");
-                    self.Price("");
+                    self.Product(new ProductViewModel(nullProduct));
                 }
             }).fail(
                 function (xhr, textStatus, err) {
@@ -62,12 +75,51 @@
         else {
             alert('Please Enter All the Values !!');
         }
+
     }
 
-    // Delete product details
-    self.deleteConfirm = function (Product) {
+    //Show edit window
+    self.showEditUI = function (product) {
+        self.Product(new ProductViewModel(product));
 
-        var id = Product.Id;
+    };
+
+    // Update product details
+    self.update = function () {
+        if (self.Product().Name() != "" &&
+            self.Product().Price() != "") {
+            $.ajax({
+                url: 'Products/EditProduct',
+                cache: false,
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                data: ko.toJSON(self.Product),
+                success: function (data) {
+                    self.Products.removeAll();
+                    self.Products(data);
+                    self.Product(new ProductViewModel(nullProduct));
+                    alert("Record Updated Successfully");
+                    $('#myEditModal').modal('hide');
+                }
+            })
+                .fail(
+                function (xhr, textStatus, err) {
+                    alert(err);
+                });
+        }
+        else {
+            //alert('Please Enter All the Values !!');
+        }
+    }
+
+    //Show delete window
+    self.showDeleteUI = function (product) {
+        self.Product(product);
+    };
+
+    // Delete product
+    self.delete = function (product) {
+        var id = product.Id;
 
         $.ajax({
             url: 'Products/DeleteProduct/' + id,
@@ -76,7 +128,7 @@
             contentType: 'application/json; charset=utf-8',
             data: id,
             success: function (data) {
-                self.Products.remove(Product);
+                self.Products.remove(product);
             }
         }).fail(
             function (xhr, textStatus, err) {
@@ -84,51 +136,5 @@
             });
     }
 
-    // Update product details
-    self.update = function () {
-        var Product = self.Product();
-        
-        $.ajax({
-            url: 'Products/EditProduct',
-            cache: false,
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            data: ko.toJSON(Product),
-            success: function (data) {
-                self.Products.removeAll();
-                self.Products(data); //Put the response in ObservableArray
-                self.Product(null);
-                alert("Record Updated Successfully");
-            }
-        })
-            .fail(
-            function (xhr, textStatus, err) {
-                alert(err);
-            });
-    }
-
-    // Reset product details
-    self.reset = function () {
-        self.Name("");
-        self.Price("");
-
-    }
-
-    // Cancel product details
-    self.cancel = function () {
-        //self.Product(new ProductViewModel());
-    }
-
-    $("#myCreateModal").on("hide", function () {
-        self.Product(new ProductViewModel());
-    });
-
-    $("#myEditModal").on("hide", function () {
-        self.Product(new ProductViewModel());
-    });
-
-    $("#myDeleteModal").on("hide", function () {
-        self.Product(new ProductViewModel());
-    });
 }
-ko.applyBindings(new ProductViewModel());
+ko.applyBindings(new ProductsViewModel());

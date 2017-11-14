@@ -82,11 +82,15 @@ function ProductSoldViewModel() {
             contentType: 'application/json; charset=utf-8',
             data: {},
             success: function (data) {
+                console.log("detail.Product.Id =>" + detail.Product.Id);
                 self.ProductList(data); //Put the response in ObservableArray
+
                 self.SelectedProduct = ko.observable(ko.utils.arrayFirst(self.ProductList(), function (item) {
-                   return item.Id == detail.Product.Id;
+                    console.log(item.Id + "<===>" + detail.Product.Id);
+                    return item.Id == detail.Product.Id;
                 }));
-                console.log(self.SelectedProduct());
+
+                console.log(self.SelectedProduct);
             }
         });
 
