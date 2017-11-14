@@ -1,17 +1,9 @@
 ﻿$(function () {
-    $("#datepicker1").datepicker();
-    $("#datepicker2").datepicker();
+    $("#dateCreate").datepicker();
+    $("#dateEdit").datepicker();
 });
 
 var nullProductSold = {
-    //Id: '',
-    //ProductId: '',
-    //CustomerId: '',
-    //StoreId: '',
-    //Product: '',
-    //Customer: '',
-    //Store: '',
-    //DataSold: ''
 };
 function ProductSoldViewModel(data) {
     var self = this;
