@@ -24,9 +24,20 @@ namespace KeysOnboarding.Controllers
         [HttpGet]
         public JsonResultExtension GetAllProductSolds()
         {
+            //var productSolds = db.ProductSolds.Select(x => new
+            //{
+            //    Id = x.Id,
+            //    ProductId = x.ProductId,
+            //    CustomerId = x.CustomerId,
+            //    SroreId = x.StoreId,
+            //    Product = x.Product.Name,
+            //    Customer = x.Customer.Name,                              
+            //    Store = x.Store.Name,
+            //    DateSold = x.DateSold
+            //}).ToList();
             var productSolds = db.ProductSolds.Include(p => p.Customer).Include(p => p.Product).Include(p => p.Store);
             //var jsonResult = JsonConvert.SerializeObject(productSolds);
-           
+
             return new JsonResultExtension(productSolds,"dd/MM/yyyy");
         }
 
