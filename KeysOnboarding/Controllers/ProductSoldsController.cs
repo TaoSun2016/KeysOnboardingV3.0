@@ -71,6 +71,8 @@ namespace KeysOnboarding.Controllers
                 productSold.ProductId = item.ProductId;
                 productSold.CustomerId = item.CustomerId;
                 productSold.StoreId = item.StoreId;
+                productSold.DateSold = item.DateSold;
+
 
                 db.SaveChanges();
             }
