@@ -71,7 +71,6 @@ function CustomersViewModel() {
                 contentType: 'application/json; charset=utf-8',
                 data: ko.toJSON(self.Customer),
                 success: function (data) {
-                    alert("Create new customer successfully!");
                     self.Customers.push(data);
                     self.Customer(new CustomerViewModel(nullCustomer));
                 }
@@ -99,7 +98,6 @@ function CustomersViewModel() {
                     self.Customers.removeAll();
                     self.Customers(data);
                     self.Customer(new CustomerViewModel(nullCustomer));
-                    alert("Record Updated Successfully");
                     $('#myEditModal').modal('hide');
                 }
             })

@@ -97,7 +97,6 @@ function StoresViewModel() {
                     self.Stores.removeAll();
                     self.Stores(data); 
                     self.Store(new StoreViewModel(nullStore));
-                    alert("Record Updated Successfully");
                     $('#myEditModal').modal('hide');
                 }
             }).fail(

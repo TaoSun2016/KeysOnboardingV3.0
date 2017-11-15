@@ -55,7 +55,7 @@ function ProductSoldsViewModel() {
 
         self.ProductSold(new ProductSoldViewModel(nullProductSold));
 
-        $("#createDatepicker").datepicker();
+        $("#createDatepicker").datepicker({ dateFormat: 'dd/mm/yy' });
     }
 
     self.showEditUI = function (detail) {
@@ -82,7 +82,7 @@ function ProductSoldsViewModel() {
             return item.Id == detail.StoreId;
         });
         self.SelectedStore(store);
-        $("#editDatepicker").datepicker();
+        $("#editDatepicker").datepicker({ dateFormat: 'dd/mm/yy' });
     };
 
     self.showDeleteUI = function (detail) {
@@ -99,6 +99,9 @@ function ProductSoldsViewModel() {
         self.ProductSold().StoreId = self.SelectedStore().Id;
         self.ProductSold().Store = self.SelectedStore();
 
+        var tmpDate = self.ProductSold().DateSold();
+        self.ProductSold().DateSold(changeDateFormat(tmpDate)); 
+        
         $.ajax({
             url: 'ProductSolds/AddProductSold',
             cache: false,
@@ -129,6 +132,12 @@ function ProductSoldsViewModel() {
         self.ProductSold().StoreId = self.SelectedStore().Id;
         self.ProductSold().Store = self.SelectedStore();
 
+
+        console.log(self.ProductSold().DateSold);
+        var tmpDate = self.ProductSold().DateSold;
+        self.ProductSold().DateSold=changeDateFormat(tmpDate);
+        console.log(self.ProductSold().DateSold);
+        
         $.ajax({
             url: 'ProductSolds/EditProductSold',
             cache: false,
@@ -143,7 +152,6 @@ function ProductSoldsViewModel() {
                 self.SelectedStore(self.OrigStore());
                 console.log(self.SelectedCustomer().Name);
                 self.ProductSold(new ProductSoldViewModel(nullProductSold));
-                alert("Record Updated Successfully");
             }
         })
             .fail(
@@ -218,6 +226,14 @@ function ProductSoldsViewModel() {
             }
         });
 
+    }
+
+    function changeDateFormat(origDate) {
+        var arr = origDate.split("/");
+        
+        var result = arr[1] + "/" + arr[0] + "/" + arr[2];
+
+        return result;
     }
 }
 ko.applyBindings(new ProductSoldsViewModel());

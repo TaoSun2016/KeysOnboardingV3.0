@@ -63,7 +63,6 @@ function ProductsViewModel() {
                 contentType: 'application/json; charset=utf-8',
                 data: ko.toJSON(self.Product),
                 success: function (data) {
-                    alert("Create new product successfully!");
                     self.Products.push(data);
                     self.Product(new ProductViewModel(nullProduct));
                 }
@@ -75,7 +74,6 @@ function ProductsViewModel() {
         else {
             alert('Please Enter All the Values !!');
         }
-
     }
 
     //Show edit window
@@ -98,7 +96,6 @@ function ProductsViewModel() {
                     self.Products.removeAll();
                     self.Products(data);
                     self.Product(new ProductViewModel(nullProduct));
-                    alert("Record Updated Successfully");
                     $('#myEditModal').modal('hide');
                 }
             })
